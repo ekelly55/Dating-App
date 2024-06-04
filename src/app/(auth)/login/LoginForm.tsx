@@ -1,8 +1,21 @@
-import { Card, CardBody, CardHeader, Input } from '@nextui-org/react'
+'use client'
+//useform is a client side hook
+
+import { Button, Card, CardBody, CardHeader, Input } from '@nextui-org/react'
 import React from 'react'
 import { GiPadlock } from 'react-icons/gi'
+import {useForm} from 'react-hook-form'
+
+
 
 export default function LoginForm() {
+
+    const {register, handleSubmit, formState: {errors, isValid}} = useForm();
+
+    const onSubmit = (data: any) => {
+        console.log(data)
+    }
+
   return (
     <Card className='w-2/5 mx-auto'>
         <CardHeader className='flex flex-col items-center justify-center'>
@@ -16,17 +29,29 @@ export default function LoginForm() {
             </div>
         </CardHeader>
         <CardBody>
-            <form action="">
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <div className='space-y-4'>
                     <Input 
+                        defaultValue=''
                         label="Email"
                         variant='bordered'
+                        {...register('email', {required: 'Email is required'})}
+                        // the double ! turns an object into effectively a boolean (but why different from !). so this means if there's an error on the email field, then isInvalid is true and the input will tell us what's wrong?
+                        isInvalid={!!errors.email}
+                        errorMessage={errors.email?.message as string}
                     />
                     <Input 
+                        defaultValue=''
                         label="Password"
                         variant='bordered'
                         type='password'
+                        {...register('password', {required: 'Password is required'})}
+                        isInvalid={!!errors.password}
+                        errorMessage={errors.password?.message as string}
                     />
+                    <Button isDisabled={!isValid} fullWidth color='secondary' type='submit'>
+                        Login
+                    </Button>
                 </div>
             </form>
         </CardBody>
