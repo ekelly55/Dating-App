@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Providers from "./components/Providers";
-import TopNav from "./components/navbar/TopNav";
+import Providers from "../components/Providers";
+import TopNav from "../components/navbar/TopNav";
 
 
 //serves as sort of a wrapper around page.tsx
