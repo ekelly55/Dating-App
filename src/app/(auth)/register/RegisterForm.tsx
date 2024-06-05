@@ -29,7 +29,7 @@ export default function RegisterForm() {
                 <div className='flex flex-row items-center gap-3'>
 
                 <GiPadlock size={30}/>
-                <h1>register</h1>
+                <h1>Register</h1>
                 </div>
                 <p className='text-neutral-500'>Welcome to NextMatch</p>
             </div>
