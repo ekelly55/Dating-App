@@ -7,18 +7,20 @@ import { GiPadlock } from 'react-icons/gi'
 import {useForm} from 'react-hook-form'
 import { RegisterSchema, registerSchema } from '../../lib/schemas/registerSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { registerUser } from '../../actions/authActions'
 
 
 
 export default function RegisterForm() {
 
     const {register, handleSubmit, formState: {errors, isValid}} = useForm<RegisterSchema>({
-        resolver: zodResolver(registerSchema),
+        // resolver: zodResolver(registerSchema),
         //mode uontouched: as soon as you click into a field it's watching for a valid email.  if you click out of the field, you'll get an invalid email alert
         mode: 'onTouched'
     });
 
-    const onSubmit = (data: RegisterSchema) => {
+    const onSubmit = async (data: RegisterSchema) => {
+        const result = await registerUser(data)
         console.log(data)
     }
 
