@@ -4,7 +4,7 @@
 import { Button, Card, CardBody, CardHeader, Input } from '@nextui-org/react'
 import React from 'react'
 import { GiPadlock } from 'react-icons/gi'
-import {useForm} from 'react-hook-form'
+import {useForm}from 'react-hook-form'
 import { RegisterSchema, registerSchema } from '../../lib/schemas/registerSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { registerUser } from '../../actions/authActions'
@@ -20,8 +20,24 @@ export default function RegisterForm() {
     });
 
     const onSubmit = async (data: RegisterSchema) => {
-        const result = await registerUser(data)
-        console.log(data)
+        const result = await registerUser(data);
+
+        if(result.status === 'success'){
+            console.log('User registered successfully')
+        } else {
+            if(Array.isArray(result.error)){
+                result.error.forEach((e) => {
+                    //the as email...here is because we know the fieldname where  the error is will  be one of these
+                    //paths in form validation mean the sequence of keys to get to the specific key with the errors. here, with a flat object, the path is simply the key name in the object. but with vaalidating nested objects it's an important concept because the key in question may be deeply nested, making the path multiple layers
+                    const fieldName = e.path.join('.') as 'email' | 'name' | 'password'
+                    setError(fieldName, {message: e.message})
+                })
+
+            } else {
+                //setError is part of useForm from react hook form
+                setError('root.serverError', {message: result.error})
+            }
+        }
     }
 
   return (
@@ -66,6 +82,9 @@ export default function RegisterForm() {
                         isInvalid={!!errors.password}
                         errorMessage={errors.password?.message}
                     />
+                    {errors.root?.serverError && (
+                        <p className='text-danger text-sm'>{errors.root.serverError.message}</p>
+                    )}
                     <Button isDisabled={!isValid} fullWidth color='secondary' type='submit'>
                         Register
                     </Button>
