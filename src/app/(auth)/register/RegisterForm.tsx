@@ -4,7 +4,7 @@
 import { Button, Card, CardBody, CardHeader, Input } from '@nextui-org/react'
 import React from 'react'
 import { GiPadlock } from 'react-icons/gi'
-import {useForm}from 'react-hook-form'
+import { useForm, FieldValues, UseFormSetError } from 'react-hook-form'
 import { RegisterSchema, registerSchema } from '../../lib/schemas/registerSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { registerUser } from '../../actions/authActions'
@@ -12,9 +12,9 @@ import { registerUser } from '../../actions/authActions'
 
 
 export default function RegisterForm() {
-
-    const {register, handleSubmit, formState: {errors, isValid}} = useForm<RegisterSchema>({
-        // resolver: zodResolver(registerSchema),
+            //needed to deconstruct useForm to access setError?
+    const {register, handleSubmit, formState: {errors, isValid}, setError} = useForm<RegisterSchema>({
+        resolver: zodResolver(registerSchema),
         //mode uontouched: as soon as you click into a field it's watching for a valid email.  if you click out of the field, you'll get an invalid email alert
         mode: 'onTouched'
     });
