@@ -7,19 +7,30 @@ import { GiPadlock } from 'react-icons/gi'
 import {useForm} from 'react-hook-form'
 import { LoginSchema, loginSchema} from '../../lib/schemas/loginSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { signInUser } from '../../actions/authActions'
+import { useRouter } from 'next/navigation'
+// next/router deprecated. use one from next navigation
+// import { useRouter } from 'next/router'
 
 
 
 export default function LoginForm() {
 
-    const {register, handleSubmit, formState: {errors, isValid}} = useForm<LoginSchema>({
+    const router = useRouter();
+
+    const {register, handleSubmit, formState: {errors, isValid, isSubmitting}} = useForm<LoginSchema>({
         resolver: zodResolver(loginSchema),
         //mode uontouched: as soon as you click into a field it's watching for a valid email.  if you click out of the field, you'll get an invalid email alert
         mode: 'onTouched'
     });
 
-    const onSubmit = (data: LoginSchema) => {
-        console.log(data)
+    const onSubmit = async (data: LoginSchema) => {
+        const result = await signInUser(data);
+            if(result.status === 'success'){
+                router.push('/members');
+            } else {
+                console.log(result.error)
+            }
     }
 
   return (
@@ -55,7 +66,7 @@ export default function LoginForm() {
                         isInvalid={!!errors.password}
                         errorMessage={errors.password?.message as string}
                     />
-                    <Button isDisabled={!isValid} fullWidth color='secondary' type='submit'>
+                    <Button isLoading={isSubmitting} isDisabled={!isValid} fullWidth color='secondary' type='submit'>
                         Login
                     </Button>
                 </div>
