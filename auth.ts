@@ -11,6 +11,16 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
+  // Callbacks are asynchronous functions you can use to control what happens when an auth-related action is performed. Callbacks allow you to implement access controls without a database or to integrate with external databases or APIs.
+  callbacks: {
+    async session({token, session}){
+      if(token.sub && session.user){
+        //but why? wasn't this already true?
+        session.user.id = token.sub
+      }
+      return session;
+    }
+  },
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
   ...authConfig,
