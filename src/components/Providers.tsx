@@ -2,15 +2,14 @@
 
 import { NextUIProvider } from '@nextui-org/react'
 import React, {ReactNode} from 'react'
-import TopNav from './navbar/TopNav'
+import {ToastContainer} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function Providers({children}: {children: ReactNode}) {
   return (
     <NextUIProvider>
-        <main className='container mx-auto p-10'>
-
+        <ToastContainer position='bottom-right' hideProgressBar className='z-50'/>
         {children}
-      </main>
         
     </NextUIProvider>
   )

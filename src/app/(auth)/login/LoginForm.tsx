@@ -9,6 +9,7 @@ import { LoginSchema, loginSchema} from '../../lib/schemas/loginSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { signInUser } from '../../actions/authActions'
 import { useRouter } from 'next/navigation'
+import {toast} from 'react-toastify'
 // next/router deprecated. use one from next navigation
 // import { useRouter } from 'next/router'
 
@@ -29,7 +30,7 @@ export default function LoginForm() {
             if(result.status === 'success'){
                 router.push('/members');
             } else {
-                console.log(result.error)
+                toast.error(result.error as string)
             }
     }
 
